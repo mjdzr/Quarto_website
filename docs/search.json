@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "index.html#libraries-and-data-setup",
+    "href": "index.html#libraries-and-data-setup",
+    "title": "ggradar Example",
+    "section": "Libraries and data setup",
+    "text": "Libraries and data setup\nCreate a test data…\n\nlibrary(ggradar)\nlibrary(tidyverse)\n\nset.seed(123)\n\n# Create data: note in High school for Jonathan:\ndata &lt;- data.frame(\n  month = rep(month.name, 3), \n  p_value = rnorm(36, mean = 0.2, sd = 0.1),\n  group = c(rep('A', 12), rep('B', 12), rep('C', 12))\n)"
+  },
+  {
+    "objectID": "index.html#data-setup-part-ii",
+    "href": "index.html#data-setup-part-ii",
+    "title": "ggradar Example",
+    "section": "Data setup part II",
+    "text": "Data setup part II\n\ndata$month &lt;- factor(data$month, levels = month.name)\nmax_number &lt;- ceiling(max(data$p_value, na.rm = T) * 10) / 10\n\ndata &lt;- data %&gt;% \n  pivot_wider(\n    names_from = month,\n    values_from = p_value\n  )\n\ndata &lt;- rbind(data, c(\"p-value = 0.05\", rep(0.05, 12)))\ndata &lt;-  data %&gt;% mutate_at(.vars = 2:13, .funs = as.numeric)"
+  },
+  {
+    "objectID": "index.html#ggradar-code",
+    "href": "index.html#ggradar-code",
+    "title": "ggradar Example",
+    "section": "ggradar code",
+    "text": "ggradar code\n\n\n\n\n\n\nCode\n\n\ng &lt;- ggradar(data, \n        grid.max = max_number, \n        grid.mid = max_number / 2,\n        gridline.mid.colour = \"grey\",\n        gridline.max.linetype = \"solid\",\n        legend.position = \"right\",\n        values.radar = c(0, max_number/2, max_number),\n        group.point.size = NA\n        ) \n\n\n\nPrint the plot\n\n\nplot(g)"
+  }
+]
