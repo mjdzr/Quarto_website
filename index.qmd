@@ -1,0 +1,72 @@
+---
+title: "ggradar Example"
+format: revealjs
+author: "Majid Zaremehrjardy"
+date: " `r format(Sys.time(), '%B %d, %Y')`"
+---
+
+## Libraries and data setup
+
+Create a test data...
+
+```{r, echo=TRUE}
+library(ggradar)
+library(tidyverse)
+
+set.seed(123)
+
+# Create data: note in High school for Jonathan:
+data <- data.frame(
+  month = rep(month.name, 3), 
+  p_value = rnorm(36, mean = 0.2, sd = 0.1),
+  group = c(rep('A', 12), rep('B', 12), rep('C', 12))
+)
+```
+
+## Data setup part II
+
+```{r, echo=TRUE}
+data$month <- factor(data$month, levels = month.name)
+max_number <- ceiling(max(data$p_value, na.rm = T) * 10) / 10
+
+data <- data %>% 
+  pivot_wider(
+    names_from = month,
+    values_from = p_value
+  )
+
+data <- rbind(data, c("p-value = 0.05", rep(0.05, 12)))
+data <-  data %>% mutate_at(.vars = 2:13, .funs = as.numeric)
+```
+
+## ggradar code
+
+<div style="font-size: 28px;">
+
+<!-- Set your desired font size here -->
+
+::: columns
+::: {.column width="40%"}
+1.  Code
+
+```{r, echo=TRUE}
+g <- ggradar(data, 
+        grid.max = max_number, 
+        grid.mid = max_number / 2,
+        gridline.mid.colour = "grey",
+        gridline.max.linetype = "solid",
+        legend.position = "right",
+        values.radar = c(0, max_number/2, max_number),
+        group.point.size = NA
+        ) 
+```
+:::
+
+::: {.column width="60%"}
+2.  Print the plot
+
+```{r, echo=T}
+plot(g)
+```
+:::
+:::
